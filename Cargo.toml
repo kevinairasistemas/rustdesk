@@ -1,7 +1,7 @@
 [package]
 name = "Soporte-Sistemas"
 version = "1.4.6"
-authors = ["Kevin Martín <kevin@airaweb.com>"]
+authors = ["Kevin Martin <kevin@airaweb.com>"]
 edition = "2021"
 build= "build.rs"
 description = "Soporte Remoto Sistemas Level"
