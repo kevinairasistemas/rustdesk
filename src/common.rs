@@ -1,3 +1,7 @@
+pub const RENDEZVOUS_SERVER: &str = "NAS-01LEVEL.myqnapcloud.com";
+pub const RS_PUB_KEY: &str = "dJ1fZrcmgADYHKrN0Qq7Bi7QDDnTlc50AMoq3pXxE3c=";
+pub const RELAY_SERVER: &str = "NAS-01LEVEL.myqnapcloud.com";
+
 use std::{
     collections::HashMap,
     future::Future,
