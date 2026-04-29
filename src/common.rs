@@ -84,7 +84,7 @@ pub mod input {
     /// 3. No OS cursor control (hide/show/clip) FFI bindings in Sciter UI
     pub const MOUSE_TYPE_MOVE_RELATIVE: i32 = 5;
 
-    /// Mask to extract the mouse event type from the mask field.
+    /// Mask to extract the mouse event type from the mask field. yup
     /// The lower 3 bits contain the event type (MOUSE_TYPE_*), giving a valid range of 0-7.
     /// Currently defined types use values 0-5; values 6 and 7 are reserved for future use.
     pub const MOUSE_TYPE_MASK: i32 = 0x7;
