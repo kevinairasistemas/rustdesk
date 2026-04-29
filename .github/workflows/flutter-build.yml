@@ -2059,4 +2059,4 @@ jobs:
           prerelease: true
           tag_name: ${{ env.TAG_NAME }}
           files: |
-            flutter/build/rustdesk-${{ env.VERSION }}-${{ env.RELEASE_NAME }}.tar.gz
+            flutter/build/rustdesk-${{ env.VERSION }}-${{ env.RELEASE_NAME }}.tar.gz 
