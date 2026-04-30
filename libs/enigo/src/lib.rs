@@ -51,6 +51,9 @@
 //! enigo.mouse_up(MouseButton::Left);
 //! enigo.key_sequence("hello world");
 //! ```
+
+#![allow(deprecated)]
+
 #![deny(missing_docs)]
 
 #[cfg(target_os = "macos")]
