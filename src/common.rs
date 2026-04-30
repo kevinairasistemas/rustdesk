@@ -1823,7 +1823,7 @@ pub async fn get_key(sync: bool) -> String {
         options.remove("key").unwrap_or_default()
     };
     if key.is_empty() {
-        key = config::dJ1fZrcmgADYHKrN0Qq7Bi7QDDnTlc50AMoq3pXxE3c=.to_owned();
+        key = "dJ1fZrcmgADYHKrN0Qq7Bi7QDDnTlc50AMoq3pXxE3c=".to_owned();
     }
     key
 }
