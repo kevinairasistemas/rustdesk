@@ -247,10 +247,14 @@ jobs:
           sed -i '/dpiAware/d' res/manifest.xml
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          # CAMBIO: El ejecutable de entrada ahora se llama Soporte-Sistemas.exe
+          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/Soporte-Sistemas.exe
           popd
           mkdir -p ./SignOutput
-          mv ./target/release/rustdesk-portable-packer.exe ./SignOutput/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
+          # CAMBIO: El packer de Rust también habrá cambiado de nombre si renombraste el proyecto raíz
+          # Si no renombraste el binario del packer específicamente, puede que siga siendo rustdesk-portable-packer.exe
+          # Pero lo más seguro es que debas ajustar el nombre del output final aquí:
+          mv ./target/release/rustdesk-portable-packer.exe ./SignOutput/Soporte-Sistemas-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
