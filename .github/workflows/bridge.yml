@@ -1,6 +1,6 @@
-# This yaml shares the build bridge steps with ci and nightly.
+# Este archivo gestiona la generación del "puente" entre Rust y Flutter.
+# Optimizado para el fork Soporte-Sistemas (Solo Windows).
 name: Build flutter-rust-bridge
-# 2023-11-23 18:00:00+00:00
 
 on:
   workflow_call:
@@ -9,20 +9,12 @@ env:
   CARGO_EXPAND_VERSION: "1.0.95"
   FLUTTER_VERSION: "3.22.3"
   FLUTTER_RUST_BRIDGE_VERSION: "1.80.1"
-  RUST_VERSION: "1.75" # https://github.com/rustdesk/rustdesk/discussions/7503
+  RUST_VERSION: "1.75"
 
 jobs:
   generate_bridge:
-    runs-on: ${{ matrix.job.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        job:
-          - {
-              target: x86_64-unknown-linux-gnu,
-              os: ubuntu-22.04,
-              extra-build-args: "",
-            }
+    # Mantenemos Ubuntu para generar el código porque es el entorno más rápido y estable para codegen
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -52,19 +44,13 @@ jobs:
         uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ env.RUST_VERSION }}
-          targets: ${{ matrix.job.target }}
+          # Solo necesitamos el target de Linux para que el compilador de Rust funcione en este job
+          targets: x86_64-unknown-linux-gnu
           components: "rustfmt"
 
       - uses: Swatinem/rust-cache@v2
         with:
-          prefix-key: bridge-${{ matrix.job.os }}
-
-      - name: Cache Bridge
-        id: cache-bridge
-        uses: actions/cache@v3
-        with:
-          path: /tmp/flutter_rust_bridge
-          key: vcpkg-${{ matrix.job.arch }}
+          prefix-key: bridge-ubuntu-22.04
 
       - name: Install flutter
         uses: subosito/flutter-action@v2
@@ -82,8 +68,9 @@ jobs:
 
       - name: Run flutter rust bridge
         run: |
-          ~/.cargo/bin/flutter_rust_bridge_codegen --rust-input ./src/flutter_ffi.rs --dart-output ./flutter/lib/generated_bridge.dart --c-output ./flutter/macos/Runner/bridge_generated.h
-          cp ./flutter/macos/Runner/bridge_generated.h ./flutter/ios/Runner/bridge_generated.h
+          # Solo generamos los archivos necesarios para el core y Dart (Windows los consumirá después)
+          # Eliminamos los outputs de macOS e iOS para evitar errores y ahorrar tiempo
+          ~/.cargo/bin/flutter_rust_bridge_codegen --rust-input ./src/flutter_ffi.rs --dart-output ./flutter/lib/generated_bridge.dart
 
       - name: Upload Artifact
         uses: actions/upload-artifact@master
@@ -94,5 +81,3 @@ jobs:
             ./src/bridge_generated.io.rs
             ./flutter/lib/generated_bridge.dart
             ./flutter/lib/generated_bridge.freezed.dart
-            ./flutter/macos/Runner/bridge_generated.h
-            ./flutter/ios/Runner/bridge_generated.h 
