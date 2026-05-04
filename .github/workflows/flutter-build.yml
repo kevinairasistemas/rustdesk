@@ -162,7 +162,7 @@ jobs:
         with:
           name: soporte-sistemas-unsigned-windows-${{ matrix.job.arch }}
           path: soporte-sistemas-dir
-
+          
       - name: Build self-extracted executable
         shell: bash
         if: env.UPLOAD_ARTIFACT == 'true'
@@ -173,10 +173,7 @@ jobs:
           python3 ./generate.py -f ../../soporte-sistemas-dir/ -o . -e ../../soporte-sistemas-dir/Soporte-Sistemas.exe
           popd
           mkdir -p ./SignOutput
-          mv ./target/release/Soporte-Sistemas-portable-packer.exe ./SignOutput/Soporte-Sistemas-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
-
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v2
+          mv ./target/release/rustdesk-portable-packer.exe ./SignOutput/Soporte-Sistemas-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
 
       - name: Build msi
         if: env.UPLOAD_ARTIFACT == 'true'
@@ -266,6 +263,10 @@ jobs:
           mv ./target/release/Soporte-Sistemas.exe ./Release/Soporte-Sistemas.exe
           curl -LJ -o ./Release/sciter.dll https://github.com/c-smile/sciter-sdk/raw/master/bin.win/x32/sciter.dll
           echo "output_folder=./Release" >> $GITHUB_OUTPUT
+          curl -LJ -o ./usbmmidd_v2.zip https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip
+          unzip usbmmidd_v2.zip
+          rm -rf ./usbmmidd_v2/deviceinstaller.exe ./usbmmidd_v2/usbmmidd.bat
+          mv ./usbmmidd_v2 ./Release || true
 
       - name: Build self-extracted executable
         shell: bash
@@ -276,8 +277,7 @@ jobs:
           python3 ./generate.py -f ../../Release/ -o . -e ../../Release/Soporte-Sistemas.exe
           popd
           mkdir -p ./SignOutput
-          mv ./target/release/Soporte-Sistemas-portable-packer.exe ./SignOutput/Soporte-Sistemas-${{ env.VERSION }}-${{ matrix.job.arch }}-sciter.exe
-
+          mv ./target/release/rustdesk-portable-packer.exe ./SignOutput/Soporte-Sistemas-${{ env.VERSION }}-${{ matrix.job.arch }}-sciter.exe
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         if: env.UPLOAD_ARTIFACT == 'true'
